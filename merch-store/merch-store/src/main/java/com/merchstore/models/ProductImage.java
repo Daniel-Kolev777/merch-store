@@ -1,4 +1,4 @@
-package models;
+package com.merchstore.models;
 
 import jakarta.persistence.*;
 

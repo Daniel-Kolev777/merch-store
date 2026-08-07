@@ -1,7 +1,7 @@
-package models;
+package com.merchstore.models;
 
 import jakarta.persistence.*;
-import models.enums.OrderStatus;
+import com.merchstore.models.enums.OrderStatus;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -40,7 +40,7 @@ public class Order {
     private OrderStatus status = OrderStatus.PENDING;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

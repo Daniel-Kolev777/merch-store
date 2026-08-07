@@ -1,7 +1,6 @@
-package models;
+package com.merchstore.models;
 
 import jakarta.persistence.*;
-import models.enums.OrderStatus;
 
 import java.math.BigDecimal;
 

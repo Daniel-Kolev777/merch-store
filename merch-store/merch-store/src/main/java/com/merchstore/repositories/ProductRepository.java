@@ -1,7 +1,7 @@
-package repositories;
+package com.merchstore.repositories;
 
-import models.Category;
-import models.Product;
+import com.merchstore.models.Category;
+import com.merchstore.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package merch_store;
+package com.merchstore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MerchStoreApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MerchStoreApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MerchStoreApplication.class, args);
+    }
 
 }
