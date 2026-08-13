@@ -12,4 +12,10 @@ public class EntityDuplicateException extends RuntimeException {
   public String getFieldName() {
     return fieldName;
   }
+
+  public EntityDuplicateException(String message) {
+    super(message);
+    this.fieldName = null;
+  }
+
 }

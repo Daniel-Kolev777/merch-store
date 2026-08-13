@@ -1,9 +1,9 @@
 package com.merchstore.services;
 
-import com.merchstore.dtos.UserOutDto;
-import com.merchstore.dtos.UserRegisterInDto;
-import com.merchstore.dtos.UserRestoreDto;
-import com.merchstore.dtos.UserUpdateDto;
+import com.merchstore.dtos.user.UserOutDto;
+import com.merchstore.dtos.user.UserRegisterInDto;
+import com.merchstore.dtos.user.UserRestoreDto;
+import com.merchstore.dtos.user.UserUpdateDto;
 import com.merchstore.exceptions.EntityDuplicateException;
 import com.merchstore.exceptions.EntityNotFoundException;
 import com.merchstore.helpers.UserMapper;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.merchstore.repositories.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -38,6 +37,12 @@ public class UserServiceImpl implements UserService{
         newUser.setPassword(passwordEncoder.encode(registerInDto.getPassword()));
         userRepository.save(newUser);
 
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("User", "username", username));
     }
 
     @Override

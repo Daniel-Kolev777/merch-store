@@ -19,6 +19,9 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
     public Category(String name) {
         this.name = name;
     }
@@ -48,5 +51,13 @@ public class Category {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

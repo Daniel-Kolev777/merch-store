@@ -1,4 +1,4 @@
-package com.merchstore.dtos;
+package com.merchstore.dtos.user;
 
 import jakarta.validation.constraints.NotEmpty;
 

@@ -1,11 +1,9 @@
 package com.merchstore.controllers;
 
-import com.merchstore.dtos.UserLoginDto;
-import com.merchstore.dtos.UserOutDto;
-import com.merchstore.dtos.UserRegisterInDto;
-import com.merchstore.dtos.UserRestoreDto;
+import com.merchstore.dtos.user.UserLoginDto;
+import com.merchstore.dtos.user.UserRegisterInDto;
+import com.merchstore.dtos.user.UserRestoreDto;
 import com.merchstore.helpers.MessageConstants;
-import com.merchstore.models.User;
 import com.merchstore.security.JwtUtil;
 import com.merchstore.services.UserService;
 
@@ -14,7 +12,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

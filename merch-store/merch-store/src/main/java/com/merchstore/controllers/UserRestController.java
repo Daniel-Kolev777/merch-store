@@ -1,7 +1,7 @@
 package com.merchstore.controllers;
 
-import com.merchstore.dtos.UserOutDto;
-import com.merchstore.dtos.UserUpdateDto;
+import com.merchstore.dtos.user.UserOutDto;
+import com.merchstore.dtos.user.UserUpdateDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

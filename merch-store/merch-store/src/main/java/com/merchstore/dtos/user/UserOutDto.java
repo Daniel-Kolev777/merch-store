@@ -1,4 +1,4 @@
-package com.merchstore.dtos;
+package com.merchstore.dtos.user;
 
 import com.merchstore.models.enums.Role;
 

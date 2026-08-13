@@ -1,7 +1,7 @@
 package com.merchstore.helpers;
 
-import com.merchstore.dtos.UserOutDto;
-import com.merchstore.dtos.UserRegisterInDto;
+import com.merchstore.dtos.user.UserOutDto;
+import com.merchstore.dtos.user.UserRegisterInDto;
 import com.merchstore.models.User;
 import org.springframework.stereotype.Component;
 
