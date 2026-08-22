@@ -1,8 +1,8 @@
 package com.merchstore.controllers;
 
-import com.merchstore.dtos.CategoryCreateDto;
-import com.merchstore.dtos.CategoryOutDto;
-import com.merchstore.dtos.CategoryUpdateDto;
+import com.merchstore.dtos.category.CategoryCreateDto;
+import com.merchstore.dtos.category.CategoryOutDto;
+import com.merchstore.dtos.category.CategoryUpdateDto;
 import com.merchstore.models.User;
 import com.merchstore.services.CategoryService;
 import com.merchstore.services.UserService;

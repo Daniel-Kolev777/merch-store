@@ -1,4 +1,4 @@
-package com.merchstore.dtos;
+package com.merchstore.dtos.category;
 
 import com.merchstore.models.Product;
 

@@ -1,12 +1,7 @@
-package com.merchstore.dtos;
+package com.merchstore.dtos.category;
 
-public class CategoryCreateDto {
-
+public class CategoryUpdateDto {
     private String name;
-
-    public CategoryCreateDto(String name) {
-        this.name = name;
-    }
 
     public String getName() {
         return name;

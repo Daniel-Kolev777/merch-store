@@ -15,7 +15,7 @@ public class ProductImage {
     private String imageURL;
 
     @ManyToOne
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     public ProductImage(String imageURL) {

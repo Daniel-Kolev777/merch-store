@@ -4,6 +4,7 @@ import com.merchstore.dtos.user.UserOutDto;
 import com.merchstore.dtos.user.UserRegisterInDto;
 import com.merchstore.dtos.user.UserRestoreDto;
 import com.merchstore.dtos.user.UserUpdateDto;
+import com.merchstore.exceptions.BadRequestException;
 import com.merchstore.exceptions.EntityDuplicateException;
 import com.merchstore.exceptions.EntityNotFoundException;
 import com.merchstore.helpers.UserMapper;
@@ -94,7 +95,7 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
 
         if (!user.isDeleted()) {
-            throw new IllegalStateException("User is already active");
+            throw new BadRequestException("User is already active");
         }
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {

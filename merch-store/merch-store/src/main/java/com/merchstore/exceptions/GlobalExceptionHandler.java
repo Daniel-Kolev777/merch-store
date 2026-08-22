@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +69,60 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 errorResponse,
                 HttpStatus.CONFLICT
+        );
+    }
+
+    @ExceptionHandler(InvalidProductException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidProduct(
+            InvalidProductException ex) {
+
+        Map<String, String> errorResponse = new HashMap<>();
+
+        errorResponse.put("error", "Bad Request");
+        errorResponse.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(
+                errorResponse,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<Map<String, String>> handleAuthorizationException(AuthorizationException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Unauthorized");
+        errorResponse.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Map<String, String>> handleBadRequestException(
+            RuntimeException ex) {
+
+        Map<String, String> errorResponse = new HashMap<>();
+
+        errorResponse.put("error", "Bad Request");
+        errorResponse.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(
+                errorResponse,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<Map<String, String>> handleIOException(
+            IOException ex) {
+
+        Map<String, String> errorResponse = new HashMap<>();
+
+        errorResponse.put("error", "Internal Server Error");
+        errorResponse.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(
+                errorResponse,
+                HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
 

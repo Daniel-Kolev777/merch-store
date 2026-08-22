@@ -1,8 +1,9 @@
 package com.merchstore.services;
 
-import com.merchstore.dtos.CategoryCreateDto;
-import com.merchstore.dtos.CategoryOutDto;
-import com.merchstore.dtos.CategoryUpdateDto;
+import com.merchstore.dtos.category.CategoryCreateDto;
+import com.merchstore.dtos.category.CategoryOutDto;
+import com.merchstore.dtos.category.CategoryUpdateDto;
+import com.merchstore.exceptions.AuthorizationException;
 import com.merchstore.exceptions.EntityDuplicateException;
 import com.merchstore.exceptions.EntityNotFoundException;
 import com.merchstore.helpers.CategoryMapper;
@@ -50,7 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryOutDto create(User executingUser, CategoryCreateDto categoryCreateDto) {
 
         if (!RoleValidator.isAdmin(executingUser)) {
-            throw new IllegalArgumentException(
+            throw new AuthorizationException(
                     ONLY_ADMIN_CAN_CREATE_CATEGORIES_ERROR_MESSAGE
             );
         }
@@ -108,7 +109,7 @@ public class CategoryServiceImpl implements CategoryService {
             categoryToUpdate.setName(categoryUpdateDto.getName());
             categoryRepository.save(categoryToUpdate);
         }else {
-            throw new IllegalArgumentException(ONLY_ADMIN_CAN_UPDATE_CATEGORIES_ERROR_MESSAGE);
+            throw new AuthorizationException(ONLY_ADMIN_CAN_UPDATE_CATEGORIES_ERROR_MESSAGE);
         }
 
         return categoryMapper.fromCategoryToOutDto(categoryToUpdate);
@@ -118,7 +119,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryOutDto delete(Long id, User executingUser) {
 
         if (!RoleValidator.isAdmin(executingUser)) {
-            throw new IllegalArgumentException(
+            throw new AuthorizationException(
                     ONLY_ADMIN_CAN_DELETE_CATEGORIES_ERROR_MESSAGE
             );
         }
@@ -139,7 +140,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryOutDto restore(Long id, User executingUser) {
 
         if (!RoleValidator.isAdmin(executingUser)) {
-            throw new IllegalArgumentException(
+            throw new AuthorizationException(
                     ONLY_ADMIN_CAN_DELETE_CATEGORIES_ERROR_MESSAGE
             );
         }
