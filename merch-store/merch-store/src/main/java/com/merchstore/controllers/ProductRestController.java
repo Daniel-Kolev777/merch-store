@@ -1,8 +1,8 @@
 package com.merchstore.controllers;
 
-import com.merchstore.dtos.ProductCreateDto;
-import com.merchstore.dtos.ProductOutDto;
-import com.merchstore.dtos.ProductUpdateDto;
+import com.merchstore.dtos.product.ProductCreateDto;
+import com.merchstore.dtos.product.ProductOutDto;
+import com.merchstore.dtos.product.ProductUpdateDto;
 import com.merchstore.models.User;
 import com.merchstore.models.filters.ProductFilterOptions;
 import com.merchstore.services.ProductService;

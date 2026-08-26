@@ -1,37 +1,32 @@
-package com.merchstore.dtos;
-
-import jakarta.validation.constraints.DecimalMin;
+package com.merchstore.dtos.product;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-public class ProductUpdateDto {
+public class ProductOutDto {
 
     private String name;
 
     private String description;
 
-    @DecimalMin(
-            value = "0.0",
-            inclusive = false,
-            message = "Price must be greater than 0"
-    )
     private BigDecimal price;
 
-    private Long categoryId;
+    private String categoryName;
 
-    public ProductUpdateDto() {
-    }
+    private List<ProductImageOutDto> images;
 
-    public ProductUpdateDto(
+    public ProductOutDto(
             String name,
             String description,
             BigDecimal price,
-            Long categoryId) {
+            String categoryName,
+            List<ProductImageOutDto> images) {
 
         this.name = name;
         this.description = description;
         this.price = price;
-        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.images = images;
     }
 
     public String getName() {
@@ -58,11 +53,19 @@ public class ProductUpdateDto {
         this.price = price;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public List<ProductImageOutDto> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ProductImageOutDto> images) {
+        this.images = images;
     }
 }

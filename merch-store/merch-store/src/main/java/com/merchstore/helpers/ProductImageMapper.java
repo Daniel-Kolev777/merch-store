@@ -1,6 +1,6 @@
 package com.merchstore.helpers;
 
-import com.merchstore.dtos.ProductImageOutDto;
+import com.merchstore.dtos.product.ProductImageOutDto;
 import com.merchstore.models.ProductImage;
 import org.springframework.stereotype.Component;
 

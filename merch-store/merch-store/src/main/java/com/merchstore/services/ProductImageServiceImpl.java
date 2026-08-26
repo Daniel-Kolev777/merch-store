@@ -1,6 +1,6 @@
 package com.merchstore.services;
 
-import com.merchstore.dtos.ProductImageOutDto;
+import com.merchstore.dtos.product.ProductImageOutDto;
 import com.merchstore.exceptions.AuthorizationException;
 import com.merchstore.exceptions.BadRequestException;
 import com.merchstore.exceptions.EntityNotFoundException;

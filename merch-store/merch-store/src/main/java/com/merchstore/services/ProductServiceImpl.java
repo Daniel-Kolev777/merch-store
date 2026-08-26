@@ -1,8 +1,8 @@
 package com.merchstore.services;
 
-import com.merchstore.dtos.ProductCreateDto;
-import com.merchstore.dtos.ProductOutDto;
-import com.merchstore.dtos.ProductUpdateDto;
+import com.merchstore.dtos.product.ProductCreateDto;
+import com.merchstore.dtos.product.ProductOutDto;
+import com.merchstore.dtos.product.ProductUpdateDto;
 import com.merchstore.exceptions.AuthorizationException;
 import com.merchstore.exceptions.BadRequestException;
 import com.merchstore.exceptions.EntityNotFoundException;

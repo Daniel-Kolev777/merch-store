@@ -1,6 +1,6 @@
 package com.merchstore.services;
 
-import com.merchstore.dtos.ProductImageOutDto;
+import com.merchstore.dtos.product.ProductImageOutDto;
 import com.merchstore.models.User;
 import org.springframework.web.multipart.MultipartFile;
 

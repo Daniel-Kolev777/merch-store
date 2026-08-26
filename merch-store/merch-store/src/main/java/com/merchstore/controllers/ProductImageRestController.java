@@ -1,6 +1,6 @@
 package com.merchstore.controllers;
 
-import com.merchstore.dtos.ProductImageOutDto;
+import com.merchstore.dtos.product.ProductImageOutDto;
 import com.merchstore.models.User;
 import com.merchstore.services.ProductImageService;
 import com.merchstore.services.UserService;

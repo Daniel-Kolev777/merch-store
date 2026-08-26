@@ -1,8 +1,8 @@
 package com.merchstore.services;
 
-import com.merchstore.dtos.ProductCreateDto;
-import com.merchstore.dtos.ProductOutDto;
-import com.merchstore.dtos.ProductUpdateDto;
+import com.merchstore.dtos.product.ProductCreateDto;
+import com.merchstore.dtos.product.ProductOutDto;
+import com.merchstore.dtos.product.ProductUpdateDto;
 import com.merchstore.models.User;
 import com.merchstore.models.filters.ProductFilterOptions;
 import org.springframework.web.multipart.MultipartFile;

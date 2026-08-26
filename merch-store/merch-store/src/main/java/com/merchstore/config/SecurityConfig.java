@@ -1,6 +1,5 @@
 package com.merchstore.config;
 
-
 import com.merchstore.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,15 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
-
 
     public SecurityConfig(
             JwtAuthenticationFilter jwtAuthenticationFilter,
@@ -35,27 +31,20 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
-
-
     @Bean
     public AuthenticationManager authenticationManager() {
 
         DaoAuthenticationProvider provider =
                 new DaoAuthenticationProvider(userDetailsService);
 
-
         provider.setPasswordEncoder(passwordEncoder());
-
 
         return new ProviderManager(provider);
     }
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)
             throws Exception {
-
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -65,7 +54,8 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/auth/register",
                                 "/api/auth/restore",
-                                "/api/products"
+                                "/api/products",
+                                "/api/carts/**"
                         ).permitAll()
 
                         .anyRequest().authenticated()
@@ -82,14 +72,11 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 );
 
-
         return http.build();
     }
 
-
-
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
