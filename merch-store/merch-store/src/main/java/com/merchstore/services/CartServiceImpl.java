@@ -11,6 +11,7 @@ import com.merchstore.models.CartItem;
 import com.merchstore.models.CartResult;
 import com.merchstore.models.Product;
 import com.merchstore.models.User;
+import com.merchstore.models.enums.Size;
 import com.merchstore.repositories.CartItemRepository;
 import com.merchstore.repositories.CartRepository;
 import com.merchstore.repositories.ProductRepository;
@@ -90,11 +91,16 @@ public class CartServiceImpl implements CartService {
                         )
                 );
 
+        Size size = parseSize(
+                cartItemCreateDto.getSize()
+        );
+
         CartItem cartItem =
                 cartItemRepository
-                        .findByCartIdAndProductId(
+                        .findByCartIdAndProductIdAndSize(
                                 cart.getId(),
-                                product.getId()
+                                product.getId(),
+                                size
                         )
                         .orElse(null);
 
@@ -114,6 +120,7 @@ public class CartServiceImpl implements CartService {
             cartItem.setQuantity(
                     cartItemCreateDto.getQuantity()
             );
+            cartItem.setSize(size);
 
             cart.getItems().add(cartItem);
         }
@@ -220,6 +227,28 @@ public class CartServiceImpl implements CartService {
         cartRepository.save(cart);
 
         return cartMapper.fromCartToOutDto(cart);
+    }
+
+    private Size parseSize(String size) {
+
+        if (size == null || size.isBlank()) {
+            throw new BadRequestException(
+                    "Size is required!"
+            );
+        }
+
+        try {
+
+            return Size.valueOf(
+                    size.toUpperCase()
+            );
+
+        } catch (IllegalArgumentException exception) {
+
+            throw new BadRequestException(
+                    "Invalid size: " + size
+            );
+        }
     }
 
     private Cart findOrCreateCart(

@@ -1,5 +1,7 @@
 package com.merchstore.dtos;
 
+import com.merchstore.models.enums.Size;
+
 import java.math.BigDecimal;
 
 public class CartItemOutDto {
@@ -7,6 +9,7 @@ public class CartItemOutDto {
     private String productName;
     private BigDecimal productPrice;
     private Integer quantity;
+    private Size size;
 
     public CartItemOutDto() {
     }
@@ -14,11 +17,13 @@ public class CartItemOutDto {
     public CartItemOutDto(
             String productName,
             BigDecimal productPrice,
-            Integer quantity) {
+            Integer quantity,
+            Size size) {
 
         this.productName = productName;
         this.productPrice = productPrice;
         this.quantity = quantity;
+        this.size = size;
     }
 
     public String getProductName() {
@@ -33,6 +38,10 @@ public class CartItemOutDto {
         return quantity;
     }
 
+    public Size getSize() {
+        return size;
+    }
+
     public void setProductName(String productName) {
         this.productName = productName;
     }
@@ -43,5 +52,9 @@ public class CartItemOutDto {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public void setSize(Size size) {
+        this.size = size;
     }
 }

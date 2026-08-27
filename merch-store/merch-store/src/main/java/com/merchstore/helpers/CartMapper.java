@@ -30,7 +30,8 @@ public class CartMapper {
         return new CartItemOutDto(
                 cartItem.getProduct().getName(),
                 cartItem.getProduct().getPrice(),
-                cartItem.getQuantity()
+                cartItem.getQuantity(),
+                cartItem.getSize()
         );
     }
 }

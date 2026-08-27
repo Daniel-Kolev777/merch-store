@@ -1,5 +1,6 @@
 package com.merchstore.models;
 
+import com.merchstore.models.enums.Size;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,13 @@ public class CartItem {
             nullable = false
     )
     private Cart cart;
+
+    @Enumerated(EnumType.STRING)
+    @Column(
+            name = "size",
+            nullable = false
+    )
+    private Size size;
 
     @ManyToOne
     @JoinColumn(
@@ -57,5 +65,13 @@ public class CartItem {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Size getSize() {
+        return size;
+    }
+
+    public void setSize(Size size) {
+        this.size = size;
     }
 }
