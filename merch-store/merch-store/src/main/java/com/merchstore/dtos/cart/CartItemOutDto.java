@@ -1,4 +1,4 @@
-package com.merchstore.dtos;
+package com.merchstore.dtos.cart;
 
 import com.merchstore.models.enums.Size;
 

@@ -15,17 +15,35 @@ public interface ProductService {
             ProductFilterOptions productFilterOptions
     );
 
+    List<ProductOutDto> getAllAdmin(
+            ProductFilterOptions productFilterOptions,
+            User currentUser
+    );
+
     ProductOutDto create(
             ProductCreateDto productCreateDto,
             List<MultipartFile> images
     );
 
-    ProductOutDto getById(Long productId);
+    ProductOutDto getById(
+            Long productId
+    );
+
+    ProductOutDto getByIdAdmin(
+            Long productId,
+            User currentUser
+    );
 
     ProductOutDto update(
             Long productId,
             ProductUpdateDto productUpdateDto,
             User executingUser
+    );
+
+    ProductOutDto changeActive(
+            Long productId,
+            boolean active,
+            User currentUser
     );
 
     void delete(

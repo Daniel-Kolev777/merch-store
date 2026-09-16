@@ -1,13 +1,17 @@
 package com.merchstore.exceptions;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.merchstore.models.enums.PaymentMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -72,6 +76,7 @@ public class GlobalExceptionHandler {
         );
     }
 
+
     @ExceptionHandler(InvalidProductException.class)
     public ResponseEntity<Map<String, String>> handleInvalidProduct(
             InvalidProductException ex) {
@@ -87,15 +92,21 @@ public class GlobalExceptionHandler {
         );
     }
 
+
     @ExceptionHandler(AuthorizationException.class)
-    public ResponseEntity<Map<String, String>> handleAuthorizationException(AuthorizationException ex) {
+    public ResponseEntity<Map<String, String>> handleAuthorizationException(
+            AuthorizationException ex) {
+
         Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", "Unauthorized");
+
+        errorResponse.put("error", "Forbidden");
         errorResponse.put("message", ex.getMessage());
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(
+                errorResponse,
+                HttpStatus.FORBIDDEN
+        );
     }
-
 
 
     @ExceptionHandler(BadRequestException.class)
@@ -113,6 +124,40 @@ public class GlobalExceptionHandler {
         );
     }
 
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex) {
+
+        Throwable cause = ex.getCause();
+
+        if (cause instanceof InvalidFormatException invalidFormatException
+                && PaymentMethod.class.equals(
+                invalidFormatException.getTargetType())) {
+
+            Map<String, String> errorResponse = new HashMap<>();
+
+            errorResponse.put("error", "Bad Request");
+            errorResponse.put("message", "Invalid payment method!");
+
+            return new ResponseEntity<>(
+                    errorResponse,
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        Map<String, String> errorResponse = new HashMap<>();
+
+        errorResponse.put("error", "Bad Request");
+        errorResponse.put("message", "Invalid request body!");
+
+        return new ResponseEntity<>(
+                errorResponse,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+
     @ExceptionHandler(IOException.class)
     public ResponseEntity<Map<String, String>> handleIOException(
             IOException ex) {
@@ -127,6 +172,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
+
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, String>> handleBadCredentials(
@@ -143,6 +189,7 @@ public class GlobalExceptionHandler {
         );
     }
 
+
     @ExceptionHandler(UserAlreadyActiveException.class)
     public ResponseEntity<Map<String, String>> handleUserAlreadyActive(
             UserAlreadyActiveException ex) {
@@ -158,6 +205,7 @@ public class GlobalExceptionHandler {
         );
     }
 
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGeneralException(
             Exception ex) {
@@ -165,7 +213,13 @@ public class GlobalExceptionHandler {
         Map<String, String> errorResponse = new HashMap<>();
 
         errorResponse.put("error", "Internal Server Error");
-        errorResponse.put("message", "Something went wrong");
+        errorResponse.put("exception", ex.getClass().getName());
+        errorResponse.put(
+                "message",
+                ex.getMessage() == null
+                        ? "No exception message"
+                        : ex.getMessage()
+        );
 
         return new ResponseEntity<>(
                 errorResponse,

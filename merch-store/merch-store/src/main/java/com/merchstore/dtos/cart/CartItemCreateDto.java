@@ -1,9 +1,11 @@
-package com.merchstore.dtos;
+package com.merchstore.dtos.cart;
 
 public class CartItemCreateDto {
 
     private Long productId;
+
     private Integer quantity;
+
     private String size;
 
     public CartItemCreateDto() {

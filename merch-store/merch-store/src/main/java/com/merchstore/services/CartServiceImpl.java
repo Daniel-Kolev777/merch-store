@@ -1,7 +1,7 @@
 package com.merchstore.services;
 
-import com.merchstore.dtos.CartItemCreateDto;
-import com.merchstore.dtos.CartOutDto;
+import com.merchstore.dtos.cart.CartItemCreateDto;
+import com.merchstore.dtos.cart.CartOutDto;
 import com.merchstore.exceptions.AuthorizationException;
 import com.merchstore.exceptions.BadRequestException;
 import com.merchstore.exceptions.EntityNotFoundException;
@@ -72,6 +72,14 @@ public class CartServiceImpl implements CartService {
             String cartToken,
             CartItemCreateDto cartItemCreateDto) {
 
+        if (cartItemCreateDto.getQuantity() == null
+                || cartItemCreateDto.getQuantity() <= 0) {
+
+            throw new BadRequestException(
+                    "Quantity must be greater than 0!"
+            );
+        }
+
         Cart cart =
                 findOrCreateCart(
                         currentUser,
@@ -91,9 +99,13 @@ public class CartServiceImpl implements CartService {
                         )
                 );
 
-        Size size = parseSize(
-                cartItemCreateDto.getSize()
-        );
+        validateProductCanBePurchased(product);
+
+        Size size =
+                resolveSize(
+                        product,
+                        cartItemCreateDto.getSize()
+                );
 
         CartItem cartItem =
                 cartItemRepository
@@ -103,6 +115,12 @@ public class CartServiceImpl implements CartService {
                                 size
                         )
                         .orElse(null);
+
+        validateTotalProductQuantityInCart(
+                cart,
+                product,
+                cartItemCreateDto.getQuantity()
+        );
 
         if (cartItem != null) {
 
@@ -117,9 +135,11 @@ public class CartServiceImpl implements CartService {
 
             cartItem.setCart(cart);
             cartItem.setProduct(product);
+
             cartItem.setQuantity(
                     cartItemCreateDto.getQuantity()
             );
+
             cartItem.setSize(size);
 
             cart.getItems().add(cartItem);
@@ -127,7 +147,9 @@ public class CartServiceImpl implements CartService {
 
         cartItemRepository.save(cartItem);
 
-        return cartMapper.fromCartToOutDto(cart);
+        return cartMapper.fromCartToOutDto(
+                cart
+        );
     }
 
     @Override
@@ -137,7 +159,9 @@ public class CartServiceImpl implements CartService {
             Long itemId,
             Integer quantity) {
 
-        if (quantity == null || quantity <= 0) {
+        if (quantity == null
+                || quantity <= 0) {
+
             throw new BadRequestException(
                     "Quantity must be greater than 0!"
             );
@@ -150,16 +174,18 @@ public class CartServiceImpl implements CartService {
                 );
 
         CartItem cartItem =
-                cartItemRepository.findById(itemId)
-                        .orElseThrow(() ->
-                                new EntityNotFoundException(
-                                        "CartItem",
-                                        "id",
-                                        String.valueOf(itemId)
-                                )
-                        );
+                cartItemRepository.findById(
+                        itemId
+                ).orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "CartItem",
+                                "id",
+                                String.valueOf(itemId)
+                        )
+                );
 
-        if (!cartItem.getCart().getId()
+        if (!cartItem.getCart()
+                .getId()
                 .equals(cart.getId())) {
 
             throw new AuthorizationException(
@@ -167,11 +193,30 @@ public class CartServiceImpl implements CartService {
             );
         }
 
+        Product product =
+                cartItem.getProduct();
+
+        validateProductCanBePurchased(product);
+
+        validateSelectedSize(
+                product,
+                cartItem.getSize()
+        );
+
+        validateTotalProductQuantityForUpdate(
+                cart,
+                product,
+                cartItem,
+                quantity
+        );
+
         cartItem.setQuantity(quantity);
 
         cartItemRepository.save(cartItem);
 
-        return cartMapper.fromCartToOutDto(cart);
+        return cartMapper.fromCartToOutDto(
+                cart
+        );
     }
 
     @Override
@@ -187,16 +232,18 @@ public class CartServiceImpl implements CartService {
                 );
 
         CartItem cartItem =
-                cartItemRepository.findById(itemId)
-                        .orElseThrow(() ->
-                                new EntityNotFoundException(
-                                        "CartItem",
-                                        "id",
-                                        String.valueOf(itemId)
-                                )
-                        );
+                cartItemRepository.findById(
+                        itemId
+                ).orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "CartItem",
+                                "id",
+                                String.valueOf(itemId)
+                        )
+                );
 
-        if (!cartItem.getCart().getId()
+        if (!cartItem.getCart()
+                .getId()
                 .equals(cart.getId())) {
 
             throw new AuthorizationException(
@@ -208,7 +255,9 @@ public class CartServiceImpl implements CartService {
 
         cart.getItems().remove(cartItem);
 
-        return cartMapper.fromCartToOutDto(cart);
+        return cartMapper.fromCartToOutDto(
+                cart
+        );
     }
 
     @Override
@@ -226,21 +275,164 @@ public class CartServiceImpl implements CartService {
 
         cartRepository.save(cart);
 
-        return cartMapper.fromCartToOutDto(cart);
+        return cartMapper.fromCartToOutDto(
+                cart
+        );
     }
 
-    private Size parseSize(String size) {
+    private void validateProductCanBePurchased(
+            Product product) {
 
-        if (size == null || size.isBlank()) {
+        if (!product.isActive()) {
+
             throw new BadRequestException(
-                    "Size is required!"
+                    "Product is not available!"
+            );
+        }
+
+        if (product.getQuantity() == null
+                || product.getQuantity() <= 0) {
+
+            throw new BadRequestException(
+                    "Product is out of stock!"
+            );
+        }
+    }
+
+    private void validateTotalProductQuantityInCart(
+            Cart cart,
+            Product product,
+            int quantityToAdd) {
+
+        int currentQuantityInCart =
+                cart.getItems()
+                        .stream()
+                        .filter(item ->
+                                item.getProduct()
+                                        .getId()
+                                        .equals(product.getId())
+                        )
+                        .mapToInt(CartItem::getQuantity)
+                        .sum();
+
+        int finalQuantity =
+                currentQuantityInCart
+                        + quantityToAdd;
+
+        if (finalQuantity > product.getQuantity()) {
+
+            throw new BadRequestException(
+                    "Not enough product quantity in stock! Available quantity: "
+                            + product.getQuantity()
+            );
+        }
+    }
+
+    private void validateTotalProductQuantityForUpdate(
+            Cart cart,
+            Product product,
+            CartItem cartItemBeingUpdated,
+            int newQuantity) {
+
+        int otherItemsQuantity =
+                cart.getItems()
+                        .stream()
+                        .filter(item ->
+                                item.getProduct()
+                                        .getId()
+                                        .equals(product.getId())
+                        )
+                        .filter(item ->
+                                !item.getId()
+                                        .equals(
+                                                cartItemBeingUpdated.getId()
+                                        )
+                        )
+                        .mapToInt(CartItem::getQuantity)
+                        .sum();
+
+        int finalQuantity =
+                otherItemsQuantity
+                        + newQuantity;
+
+        if (finalQuantity > product.getQuantity()) {
+
+            throw new BadRequestException(
+                    "Not enough product quantity in stock! Available quantity: "
+                            + product.getQuantity()
+            );
+        }
+    }
+
+    private Size resolveSize(
+            Product product,
+            String size) {
+
+        if (!product.isHasSizes()) {
+
+            if (size != null
+                    && !size.isBlank()) {
+
+                throw new BadRequestException(
+                        "This product does not use sizes!"
+                );
+            }
+
+            return null;
+        }
+
+        Size parsedSize =
+                parseSize(size);
+
+        validateSelectedSize(
+                product,
+                parsedSize
+        );
+
+        return parsedSize;
+    }
+
+    private void validateSelectedSize(
+            Product product,
+            Size size) {
+
+        if (!product.isHasSizes()) {
+            return;
+        }
+
+        if (size == null) {
+
+            throw new BadRequestException(
+                    "Size is required for this product!"
+            );
+        }
+
+        if (product.getAvailableSizes() == null
+                || !product.getAvailableSizes()
+                .contains(size)) {
+
+            throw new BadRequestException(
+                    "Selected size is not available!"
+            );
+        }
+    }
+
+    private Size parseSize(
+            String size) {
+
+        if (size == null
+                || size.isBlank()) {
+
+            throw new BadRequestException(
+                    "Size is required for this product!"
             );
         }
 
         try {
 
             return Size.valueOf(
-                    size.toUpperCase()
+                    size.trim()
+                            .toUpperCase()
             );
 
         } catch (IllegalArgumentException exception) {
@@ -265,7 +457,9 @@ public class CartServiceImpl implements CartService {
 
                 cart.setUser(currentUser);
 
-                return cartRepository.save(cart);
+                return cartRepository.save(
+                        cart
+                );
             });
         }
 
@@ -285,9 +479,12 @@ public class CartServiceImpl implements CartService {
         Cart cart = new Cart();
 
         cart.setCartToken(
-                UUID.randomUUID().toString()
+                UUID.randomUUID()
+                        .toString()
         );
 
-        return cartRepository.save(cart);
+        return cartRepository.save(
+                cart
+        );
     }
 }

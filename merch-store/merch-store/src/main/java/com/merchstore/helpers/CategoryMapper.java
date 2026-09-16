@@ -2,33 +2,43 @@ package com.merchstore.helpers;
 
 import com.merchstore.dtos.category.CategoryCreateDto;
 import com.merchstore.dtos.category.CategoryOutDto;
-import com.merchstore.dtos.category.CategoryUpdateDto;
 import com.merchstore.models.Category;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class CategoryMapper {
 
-    public List<CategoryOutDto> fromEntitiesToOutDto(List<Category> categories) {
+    public Category fromCategoryCreateDtoToCategory(
+            CategoryCreateDto categoryCreateDto
+    ) {
+
+        Category category = new Category();
+
+        category.setName(
+                categoryCreateDto.getName()
+        );
+
+        return category;
+    }
+
+    public CategoryOutDto fromCategoryToOutDto(
+            Category category
+    ) {
+
+        return new CategoryOutDto(
+                category.getId(),
+                category.getName()
+        );
+    }
+
+    public List<CategoryOutDto> fromEntitiesToOutDto(
+            List<Category> categories
+    ) {
+
         return categories.stream()
                 .map(this::fromCategoryToOutDto)
-                .collect(Collectors.toList());
-    }
-
-    public CategoryOutDto fromCategoryToOutDto(Category category){
-        return new CategoryOutDto(
-                category.getName(),
-                category.getProducts());
-    }
-
-    public Category fromCategoryCreateDtoToCategory(CategoryCreateDto categoryCreateDto){
-        return new Category(categoryCreateDto.getName());
-    }
-
-    public Category fromCategoryUpdateDtoToCategory(CategoryUpdateDto categoryUpdateDto){
-        return new Category(categoryUpdateDto.getName());
+                .toList();
     }
 }

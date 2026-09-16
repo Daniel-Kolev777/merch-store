@@ -20,10 +20,7 @@ public class CartItem {
     private Cart cart;
 
     @Enumerated(EnumType.STRING)
-    @Column(
-            name = "size",
-            nullable = false
-    )
+    @Column(name = "size")
     private Size size;
 
     @ManyToOne

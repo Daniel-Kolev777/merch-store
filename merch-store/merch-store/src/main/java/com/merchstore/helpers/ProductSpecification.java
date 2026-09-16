@@ -9,6 +9,7 @@ public class ProductSpecification {
 
     public static Specification<Product> withMinPrice(BigDecimal minPrice) {
         return (root, query, criteriaBuilder) -> {
+
             if (minPrice == null) {
                 return null;
             }
@@ -22,6 +23,7 @@ public class ProductSpecification {
 
     public static Specification<Product> withMaxPrice(BigDecimal maxPrice) {
         return (root, query, criteriaBuilder) -> {
+
             if (maxPrice == null) {
                 return null;
             }
@@ -35,6 +37,7 @@ public class ProductSpecification {
 
     public static Specification<Product> withCategory(Long categoryId) {
         return (root, query, criteriaBuilder) -> {
+
             if (categoryId == null) {
                 return null;
             }
@@ -48,6 +51,7 @@ public class ProductSpecification {
 
     public static Specification<Product> withName(String name) {
         return (root, query, criteriaBuilder) -> {
+
             if (name == null || name.trim().isEmpty()) {
                 return null;
             }
@@ -55,6 +59,20 @@ public class ProductSpecification {
             return criteriaBuilder.like(
                     criteriaBuilder.lower(root.get("name")),
                     "%" + name.trim().toLowerCase() + "%"
+            );
+        };
+    }
+
+    public static Specification<Product> withActive(Boolean active) {
+        return (root, query, criteriaBuilder) -> {
+
+            if (active == null) {
+                return null;
+            }
+
+            return criteriaBuilder.equal(
+                    root.get("active"),
+                    active
             );
         };
     }

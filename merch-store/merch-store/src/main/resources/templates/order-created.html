@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="bg"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="x-apple-disable-message-reformatting">
+
+    <title>Поръчката ти е приета - Salty East</title>
+
+    <style>
+        @media only screen and (max-width:600px) {
+
+            .outer-padding {
+                padding:10px !important;
+            }
+
+            .content-padding {
+                padding:18px 14px !important;
+            }
+
+            .header-padding {
+                padding:24px 15px !important;
+            }
+
+            .logo-image {
+                width:140px !important;
+                max-width:140px !important;
+            }
+
+            .product-image {
+                width:110px !important;
+                height:110px !important;
+            }
+
+            .info-value {
+                font-size:12px !important;
+            }
+        }
+    </style>
+</head>
+
+<body style="
+margin:0;
+padding:0;
+background-color:#080a0d;
+font-family:Arial,Helvetica,sans-serif;
+">
+
+<table role="presentation"
+       width="100%"
+       cellpadding="0"
+       cellspacing="0"
+       border="0"
+       bgcolor="#080a0d"
+       style="
+       width:100%;
+       margin:0;
+       padding:0;
+       background-color:#080a0d;
+       border-collapse:collapse;
+       ">
+
+    <tr>
+
+        <td class="outer-padding"
+            align="center"
+            bgcolor="#080a0d"
+            style="
+            padding:35px 15px;
+            background-color:#080a0d;
+            ">
+
+            <table role="presentation"
+                   width="100%"
+                   cellpadding="0"
+                   cellspacing="0"
+                   border="0"
+                   bgcolor="#11151b"
+                   style="
+                   width:100%;
+                   max-width:720px;
+                   background-color:#11151b;
+                   border:1px solid #202833;
+                   border-radius:14px;
+                   border-collapse:separate;
+                   overflow:hidden;
+                   ">
+
+                <!-- HEADER -->
+
+                <tr>
+
+                    <td class="header-padding"
+                        align="center"
+                        bgcolor="#050608"
+                        style="
+                        padding:28px 30px 30px;
+                        background-color:#050608;
+                        border-bottom:3px solid #e51b23;
+                        text-align:center;
+                        ">
+
+                        <img src="cid:saltyEastLogo"
+                             class="logo-image"
+                             width="170"
+                             alt="Salty East Logo"
+                             style="
+                             display:block;
+                             width:170px;
+                             max-width:170px;
+                             height:auto;
+                             margin:0 auto 12px;
+                             border:0;
+                             outline:none;
+                             ">
+
+                        <div style="
+                        font-size:32px;
+                        line-height:38px;
+                        font-weight:900;
+                        letter-spacing:2px;
+                        ">
+
+                            <span style="color:#ffffff !important;">
+                                SALTY
+                            </span>
+
+                            <span style="color:#e51b23 !important;">
+                                EAST
+                            </span>
+
+                        </div>
+
+                        <div style="
+                        margin-top:8px;
+                        color:#53b7ff;
+                        font-size:13px;
+                        font-weight:700;
+                        letter-spacing:3px;
+                        ">
+                            ПОРЪЧКАТА Е ПРИЕТА
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+                <!-- CONTENT -->
+
+                <tr>
+
+                    <td class="content-padding"
+                        bgcolor="#11151b"
+                        style="
+                        padding:30px;
+                        background-color:#11151b;
+                        ">
+
+
+                        <!-- GREETING -->
+
+                        <table role="presentation"
+                               width="100%"
+                               cellpadding="0"
+                               cellspacing="0"
+                               border="0">
+
+                            <tr>
+
+                                <td style="padding-bottom:22px;">
+
+                                    <div style="
+                                    color:#ffffff;
+                                    font-size:24px;
+                                    line-height:32px;
+                                    font-weight:800;
+                                    ">
+
+                                        Благодарим ти,
+
+                                        <span th:text="${order.customerName}"
+                                              style="color:#53b7ff;">
+                                            Клиент
+                                        </span>!
+
+                                    </div>
+
+                                    <div style="
+                                    margin-top:10px;
+                                    color:#9ca7b4;
+                                    font-size:14px;
+                                    line-height:22px;
+                                    ">
+
+                                        Получихме поръчка
+
+                                        <strong th:text="'#' + ${order.id}"
+                                                style="color:#ffffff;">
+                                            #1
+                                        </strong>.
+
+                                        Ще ти изпратим нов имейл, когато
+                                        поръчката бъде изпратена.
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+
+                        <!-- STATUS -->
+
+                        <table role="presentation"
+                               width="100%"
+                               cellpadding="0"
+                               cellspacing="0"
+                               border="0"
+                               bgcolor="#171c23"
+                               style="
+                               width:100%;
+                               margin-bottom:20px;
+                               background-color:#171c23;
+                               border:1px solid #39414d;
+                               border-radius:10px;
+                               border-collapse:separate;
+                               ">
+
+                            <tr>
+
+                                <td align="center"
+                                    style="padding:20px;">
+
+                                    <div style="
+                                    color:#53b7ff;
+                                    font-size:12px;
+                                    font-weight:800;
+                                    letter-spacing:2px;
+                                    ">
+                                        СТАТУС
+                                    </div>
+
+                                    <div th:text="${order.status}"
+                                         style="
+                                         margin-top:7px;
+                                         color:#ffffff;
+                                         font-size:18px;
+                                         font-weight:900;
+                                         ">
+                                        PENDING
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+
+                        <!-- DELIVERY -->
+
+                        <table role="presentation"
+                               width="100%"
+                               cellpadding="0"
+                               cellspacing="0"
+                               border="0"
+                               bgcolor="#161b22"
+                               style="
+                               width:100%;
+                               margin-bottom:20px;
+                               background-color:#161b22;
+                               border:1px solid #252d38;
+                               border-radius:10px;
+                               border-collapse:separate;
+                               ">
+
+                            <tr>
+
+                                <td style="padding:20px;">
+
+                                    <div style="
+                                    padding-bottom:10px;
+                                    margin-bottom:10px;
+                                    border-bottom:1px solid #28313c;
+                                    color:#53b7ff;
+                                    font-size:15px;
+                                    font-weight:800;
+                                    ">
+                                        ДОСТАВКА
+                                    </div>
+
+                                    <table role="presentation"
+                                           width="100%"
+                                           cellpadding="0"
+                                           cellspacing="0"
+                                           border="0"
+                                           style="border-collapse:collapse;">
+
+                                        <tr>
+
+                                            <td style="
+                                            width:35%;
+                                            padding:9px 6px 9px 0;
+                                            color:#8e99a6;
+                                            font-size:13px;
+                                            border-bottom:1px solid #202731;
+                                            ">
+                                                Град
+                                            </td>
+
+                                            <td class="info-value"
+                                                align="right"
+                                                th:text="${order.city}"
+                                                style="
+                                                padding:9px 0;
+                                                color:#ffffff;
+                                                font-size:13px;
+                                                font-weight:700;
+                                                border-bottom:1px solid #202731;
+                                                ">
+                                                Бургас
+                                            </td>
+
+                                        </tr>
+
+
+                                        <tr th:if="${order.address != null and !order.address.isBlank()}">
+
+                                            <td style="
+                                            padding:9px 6px 9px 0;
+                                            color:#8e99a6;
+                                            font-size:13px;
+                                            border-bottom:1px solid #202731;
+                                            ">
+                                                Адрес
+                                            </td>
+
+                                            <td class="info-value"
+                                                align="right"
+                                                th:text="${order.address}"
+                                                style="
+                                                padding:9px 0;
+                                                color:#ffffff;
+                                                font-size:13px;
+                                                font-weight:700;
+                                                word-break:break-word;
+                                                border-bottom:1px solid #202731;
+                                                ">
+                                                Адрес
+                                            </td>
+
+                                        </tr>
+
+
+                                        <tr th:if="${order.econtOfficeName != null and !order.econtOfficeName.isBlank()}">
+
+                                            <td style="
+                                            padding:9px 6px 9px 0;
+                                            color:#8e99a6;
+                                            font-size:13px;
+                                            border-bottom:1px solid #202731;
+                                            ">
+                                                Еконт офис
+                                            </td>
+
+                                            <td class="info-value"
+                                                align="right"
+                                                th:text="${order.econtOfficeName}"
+                                                style="
+                                                padding:9px 0;
+                                                color:#ffffff;
+                                                font-size:13px;
+                                                line-height:19px;
+                                                font-weight:700;
+                                                word-break:break-word;
+                                                border-bottom:1px solid #202731;
+                                                ">
+                                                Еконт офис
+                                            </td>
+
+                                        </tr>
+
+
+                                        <tr>
+
+                                            <td style="
+                                            padding:9px 6px 0 0;
+                                            color:#8e99a6;
+                                            font-size:13px;
+                                            ">
+                                                Плащане
+                                            </td>
+
+                                            <td class="info-value"
+                                                align="right"
+                                                th:text="${order.paymentMethod}"
+                                                style="
+                                                padding:9px 0 0;
+                                                color:#ffffff;
+                                                font-size:13px;
+                                                font-weight:700;
+                                                ">
+                                                CASH_ON_DELIVERY
+                                            </td>
+
+                                        </tr>
+
+                                    </table>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+
+                        <!-- PRODUCTS TITLE -->
+
+                        <table role="presentation"
+                               width="100%"
+                               cellpadding="0"
+                               cellspacing="0"
+                               border="0">
+
+                            <tr>
+
+                                <td style="
+                                padding:0 0 10px;
+                                color:#53b7ff;
+                                font-size:15px;
+                                font-weight:800;
+                                ">
+                                    ПРОДУКТИ
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+
+                        <!-- PRODUCTS -->
+
+                        <table th:each="item : ${order.items}"
+                               role="presentation"
+                               width="100%"
+                               cellpadding="0"
+                               cellspacing="0"
+                               border="0"
+                               bgcolor="#161b22"
+                               style="
+                               width:100%;
+                               margin-bottom:14px;
+                               background-color:#161b22;
+                               border:1px solid #252d38;
+                               border-radius:10px;
+                               border-collapse:separate;
+                               ">
+
+                            <tr>
+
+                                <td align="center"
+                                    style="
+                                    padding:20px;
+                                    text-align:center;
+                                    ">
+
+                                    <img
+                                            th:if="${item.product != null
+                                            and item.product.images != null
+                                            and !item.product.images.isEmpty()}"
+                                            th:src="${'cid:' + imageCids[item.product.images.get(0).id]}"
+                                            class="product-image"
+                                            width="120"
+                                            height="120"
+                                            alt="Продукт"
+                                            style="
+                                            display:block;
+                                            width:120px;
+                                            height:120px;
+                                            margin:0 auto;
+                                            object-fit:cover;
+                                            border-radius:10px;
+                                            border:1px solid #303a46;
+                                            ">
+
+                                    <div th:text="${item.product.name}"
+                                         style="
+                                         margin-top:14px;
+                                         color:#ffffff;
+                                         font-size:16px;
+                                         line-height:22px;
+                                         font-weight:800;
+                                         word-break:break-word;
+                                         ">
+                                        Product
+                                    </div>
+
+                                    <div style="
+                                    margin-top:8px;
+                                    color:#8e99a6;
+                                    font-size:12px;
+                                    line-height:19px;
+                                    ">
+
+                                        Размер:
+
+                                        <span th:text="${item.size}"
+                                              style="color:#ffffff;font-weight:700;">
+                                            M
+                                        </span>
+
+                                        <br>
+
+                                        Количество:
+
+                                        <span th:text="${item.quantity}"
+                                              style="color:#ffffff;font-weight:700;">
+                                            1
+                                        </span>
+
+                                    </div>
+
+                                    <div th:text="${itemPrices[item.id]}"
+                                         style="
+                                         margin-top:10px;
+                                         color:#53b7ff;
+                                         font-size:14px;
+                                         line-height:20px;
+                                         font-weight:800;
+                                         ">
+                                        39.99 € / 78.21 лв.
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+
+                        <!-- SUMMARY -->
+
+                        <table role="presentation"
+                               width="100%"
+                               cellpadding="0"
+                               cellspacing="0"
+                               border="0"
+                               bgcolor="#090c10"
+                               style="
+                               width:100%;
+                               margin-top:22px;
+                               background-color:#090c10;
+                               border:1px solid #303947;
+                               border-radius:10px;
+                               border-collapse:separate;
+                               overflow:hidden;
+                               ">
+
+                            <tr>
+
+                                <td style="
+                                padding:13px 18px;
+                                color:#8e99a6;
+                                font-size:14px;
+                                border-bottom:1px solid #212832;
+                                ">
+                                    Междинна сума
+                                </td>
+
+                                <td align="right"
+                                    th:text="${subtotalFormatted}"
+                                    style="
+                                    padding:13px 18px;
+                                    color:#ffffff;
+                                    font-size:14px;
+                                    font-weight:700;
+                                    border-bottom:1px solid #212832;
+                                    ">
+                                    39.99 € / 78.21 лв.
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td style="
+                                padding:13px 18px;
+                                color:#8e99a6;
+                                font-size:14px;
+                                border-bottom:1px solid #212832;
+                                ">
+                                    Доставка
+                                </td>
+
+                                <td align="right"
+                                    th:text="${deliveryPriceFormatted}"
+                                    style="
+                                    padding:13px 18px;
+                                    color:#ffffff;
+                                    font-size:14px;
+                                    font-weight:700;
+                                    border-bottom:1px solid #212832;
+                                    ">
+                                    4.03 € / 7.88 лв.
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td bgcolor="#161114"
+                                    style="
+                                    padding:15px 18px;
+                                    background-color:#161114;
+                                    color:#ffffff;
+                                    font-size:16px;
+                                    font-weight:800;
+                                    ">
+                                    ОБЩО
+                                </td>
+
+                                <td align="right"
+                                    bgcolor="#161114"
+                                    th:text="${totalPriceFormatted}"
+                                    style="
+                                    padding:15px 18px;
+                                    background-color:#161114;
+                                    color:#ff3c43;
+                                    font-size:18px;
+                                    line-height:24px;
+                                    font-weight:900;
+                                    ">
+                                    44.02 € / 86.09 лв.
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+
+                        <!-- MESSAGE -->
+
+                        <table role="presentation"
+                               width="100%"
+                               cellpadding="0"
+                               cellspacing="0"
+                               border="0">
+
+                            <tr>
+
+                                <td align="center"
+                                    style="
+                                    padding-top:22px;
+                                    color:#8894a1;
+                                    font-size:13px;
+                                    line-height:20px;
+                                    text-align:center;
+                                    ">
+                                    Ще ти изпратим нов имейл веднага щом
+                                    поръчката бъде изпратена.
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+
+                        <!-- FOOTER INSIDE CONTENT -->
+
+                        <table role="presentation"
+                               width="100%"
+                               cellpadding="0"
+                               cellspacing="0"
+                               border="0"
+                               bgcolor="#080a0d"
+                               style="
+                               width:100%;
+                               margin-top:24px;
+                               background-color:#080a0d !important;
+                               border-collapse:collapse;
+                               border-top:1px solid #222a34;
+                               ">
+
+                            <tr>
+
+                                <td align="center"
+                                    bgcolor="#080a0d"
+                                    style="
+                                    padding:24px 15px 7px;
+                                    background-color:#080a0d !important;
+                                    text-align:center;
+                                    ">
+
+                                    <span style="
+                                    color:#ffffff !important;
+                                    font-size:19px;
+                                    line-height:24px;
+                                    font-weight:900;
+                                    letter-spacing:2px;
+                                    ">
+                                        SALTY
+                                    </span>
+
+                                    <span style="
+                                    color:#e51b23 !important;
+                                    font-size:19px;
+                                    line-height:24px;
+                                    font-weight:900;
+                                    letter-spacing:2px;
+                                    ">
+                                        EAST
+                                    </span>
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td align="center"
+                                    bgcolor="#080a0d"
+                                    style="
+                                    padding:0 15px 24px;
+                                    background-color:#080a0d !important;
+                                    color:#697480 !important;
+                                    font-size:11px;
+                                    line-height:17px;
+                                    text-align:center;
+                                    ">
+                                    Благодарим ти за поръчката.
+                                </td>
+
+                            </tr>
+
+                        </table>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </td>
+
+    </tr>
+
+</table>
+
+</body>
+</html>

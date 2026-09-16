@@ -1,7 +1,7 @@
 package com.merchstore.controllers;
 
-import com.merchstore.dtos.CartItemCreateDto;
-import com.merchstore.dtos.CartOutDto;
+import com.merchstore.dtos.cart.CartItemCreateDto;
+import com.merchstore.dtos.cart.CartOutDto;
 import com.merchstore.models.CartResult;
 import com.merchstore.models.User;
 import com.merchstore.services.CartService;

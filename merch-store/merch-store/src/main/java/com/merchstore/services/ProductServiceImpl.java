@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -53,6 +54,28 @@ public class ProductServiceImpl implements ProductService {
 
         Specification<Product> specification =
                 ProductSpecificationBuilder.buildFrom(
+                        productFilterOptions
+                );
+
+        List<Product> products =
+                productRepository.findAll(specification);
+
+        return productMapper.fromEntitiesToOutDto(products);
+    }
+
+    @Override
+    public List<ProductOutDto> getAllAdmin(
+            ProductFilterOptions productFilterOptions,
+            User currentUser) {
+
+        if (!RoleValidator.isAdmin(currentUser)) {
+            throw new AuthorizationException(
+                    "Only Admin can view all products!"
+            );
+        }
+
+        Specification<Product> specification =
+                ProductSpecificationBuilder.buildFromAdmin(
                         productFilterOptions
                 );
 
@@ -97,9 +120,54 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = new Product();
 
-        product.setName(productCreateDto.getName());
-        product.setDescription(productCreateDto.getDescription());
-        product.setPrice(productCreateDto.getPrice());
+        product.setName(
+                productCreateDto.getName()
+        );
+
+        product.setDescription(
+                productCreateDto.getDescription()
+        );
+
+        product.setPrice(
+                productCreateDto.getPrice()
+        );
+
+        product.setWeight(
+                productCreateDto.getWeight()
+        );
+
+        product.setHasSizes(
+                productCreateDto.getHasSizes()
+        );
+
+        product.setQuantity(
+                productCreateDto.getQuantity()
+        );
+
+        if (productCreateDto.getHasSizes()) {
+
+            if (productCreateDto.getAvailableSizes() == null) {
+
+                product.setAvailableSizes(
+                        new HashSet<>()
+                );
+
+            } else {
+
+                product.setAvailableSizes(
+                        new HashSet<>(
+                                productCreateDto.getAvailableSizes()
+                        )
+                );
+            }
+
+        } else {
+
+            product.setAvailableSizes(
+                    new HashSet<>()
+            );
+        }
+
         product.setCategory(category);
 
         productRepository.save(product);
@@ -144,7 +212,44 @@ public class ProductServiceImpl implements ProductService {
                         )
                 );
 
-        return productMapper.fromProductToOutDto(product);
+        if (!product.isActive()) {
+            throw new EntityNotFoundException(
+                    "Product",
+                    "id",
+                    String.valueOf(productId)
+            );
+        }
+
+        return productMapper.fromProductToOutDto(
+                product
+        );
+    }
+
+    @Override
+    public ProductOutDto getByIdAdmin(
+            Long productId,
+            User currentUser) {
+
+        if (!RoleValidator.isAdmin(currentUser)) {
+            throw new AuthorizationException(
+                    "Only Admin can view inactive products!"
+            );
+        }
+
+        Product product =
+                productRepository.findByIdWithImages(
+                        productId
+                ).orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Product",
+                                "id",
+                                String.valueOf(productId)
+                        )
+                );
+
+        return productMapper.fromProductToOutDto(
+                product
+        );
     }
 
     @Override
@@ -171,20 +276,67 @@ public class ProductServiceImpl implements ProductService {
                 );
 
         if (productUpdateDto.getName() != null) {
+
             product.setName(
                     productUpdateDto.getName()
             );
         }
 
         if (productUpdateDto.getDescription() != null) {
+
             product.setDescription(
                     productUpdateDto.getDescription()
             );
         }
 
         if (productUpdateDto.getPrice() != null) {
+
             product.setPrice(
                     productUpdateDto.getPrice()
+            );
+        }
+
+        if (productUpdateDto.getWeight() != null) {
+
+            product.setWeight(
+                    productUpdateDto.getWeight()
+            );
+        }
+
+        if (productUpdateDto.getHasSizes() != null) {
+
+            product.setHasSizes(
+                    productUpdateDto.getHasSizes()
+            );
+
+            if (!productUpdateDto.getHasSizes()) {
+
+                product.setAvailableSizes(
+                        new HashSet<>()
+                );
+            }
+        }
+
+        if (productUpdateDto.getQuantity() != null) {
+
+            product.setQuantity(
+                    productUpdateDto.getQuantity()
+            );
+        }
+
+        if (productUpdateDto.getAvailableSizes() != null) {
+
+            if (!product.isHasSizes()) {
+
+                throw new BadRequestException(
+                        "Product does not use sizes!"
+                );
+            }
+
+            product.setAvailableSizes(
+                    new HashSet<>(
+                            productUpdateDto.getAvailableSizes()
+                    )
             );
         }
 
@@ -215,11 +367,46 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductOutDto changeActive(
+            Long productId,
+            boolean active,
+            User currentUser) {
+
+        if (!RoleValidator.isAdmin(currentUser)) {
+
+            throw new AuthorizationException(
+                    "Only Admin can change product active status!"
+            );
+        }
+
+        Product product =
+                productRepository.findByIdWithImages(
+                        productId
+                ).orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Product",
+                                "id",
+                                String.valueOf(productId)
+                        )
+                );
+
+        product.setActive(active);
+
+        Product updatedProduct =
+                productRepository.save(product);
+
+        return productMapper.fromProductToOutDto(
+                updatedProduct
+        );
+    }
+
+    @Override
     public void delete(
             Long productId,
             User currentUser) {
 
         if (!RoleValidator.isAdmin(currentUser)) {
+
             throw new AuthorizationException(
                     "Only Admin can delete products!"
             );
@@ -246,8 +433,11 @@ public class ProductServiceImpl implements ProductService {
             );
 
             try {
+
                 Files.deleteIfExists(filePath);
+
             } catch (IOException e) {
+
                 throw new BadRequestException(
                         "Could not delete product image file"
                 );

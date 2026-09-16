@@ -11,6 +11,7 @@ import com.merchstore.models.ProductImage;
 import com.merchstore.models.User;
 import com.merchstore.repositories.ProductImageRepository;
 import com.merchstore.repositories.ProductRepository;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +40,9 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public ProductImageOutDto uploadImage(Long id, MultipartFile file) {
+    public ProductImageOutDto uploadImage(
+            Long id,
+            MultipartFile file) {
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() ->
@@ -50,34 +52,35 @@ public class ProductImageServiceImpl implements ProductImageService {
                                 String.valueOf(id)
                         ));
 
-        String originalFilename = file.getOriginalFilename();
-
-        String extension = "";
-
-        if (originalFilename != null && originalFilename.contains(".")) {
-            extension = originalFilename.substring(
-                    originalFilename.lastIndexOf(".")
+        if (file == null || file.isEmpty()) {
+            throw new BadRequestException(
+                    "Image cannot be empty!"
             );
         }
 
-        String fileName = UUID.randomUUID() + extension;
+        String fileName =
+                UUID.randomUUID() + ".jpg";
 
-        Path uploadPath = Paths.get("uploads/products");
+        Path uploadPath =
+                Paths.get("uploads/products");
 
         try {
+
             Files.createDirectories(uploadPath);
 
-            Path filePath = uploadPath.resolve(fileName);
+            Path filePath =
+                    uploadPath.resolve(fileName);
 
-            Files.copy(
-                    file.getInputStream(),
-                    filePath,
-                    StandardCopyOption.REPLACE_EXISTING
-            );
+            Thumbnails.of(file.getInputStream())
+                    .scale(1.0)
+                    .outputFormat("jpg")
+                    .outputQuality(0.85)
+                    .toFile(filePath.toFile());
 
-            ProductImage productImage = new ProductImage(
-                    "/uploads/products/" + fileName
-            );
+            ProductImage productImage =
+                    new ProductImage(
+                            "/uploads/products/" + fileName
+                    );
 
             productImage.setProduct(product);
 
@@ -85,24 +88,34 @@ public class ProductImageServiceImpl implements ProductImageService {
 
             product.getImages().add(productImage);
 
-            return productImageMapper.fromProductImageToOutDto(productImage);
+            return productImageMapper
+                    .fromProductImageToOutDto(productImage);
 
         } catch (IOException e) {
-            throw new RuntimeException("Could not save image", e);
+
+            throw new RuntimeException(
+                    "Could not save image",
+                    e
+            );
         }
     }
 
     @Override
-    public List<ProductImageOutDto> getImagesByProductId(Long productId) {
+    public List<ProductImageOutDto> getImagesByProductId(
+            Long productId) {
 
         List<ProductImage> images =
-                productImageRepository.findByProductId(productId);
+                productImageRepository
+                        .findByProductId(productId);
 
-        return productImageMapper.fromListOfImagesToOutDto(images);
+        return productImageMapper
+                .fromListOfImagesToOutDto(images);
     }
 
     @Override
-    public void deleteImage(Long imageId, User currentUser) throws IOException {
+    public void deleteImage(
+            Long imageId,
+            User currentUser) throws IOException {
 
         if (!RoleValidator.isAdmin(currentUser)) {
             throw new AuthorizationException(
@@ -110,18 +123,22 @@ public class ProductImageServiceImpl implements ProductImageService {
             );
         }
 
-        ProductImage productImage = productImageRepository.findById(imageId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException(
-                                "Image",
-                                "id",
-                                String.valueOf(imageId)
-                        ));
+        ProductImage productImage =
+                productImageRepository
+                        .findById(imageId)
+                        .orElseThrow(() ->
+                                new EntityNotFoundException(
+                                        "Image",
+                                        "id",
+                                        String.valueOf(imageId)
+                                ));
 
-        Product product = productImage.getProduct();
+        Product product =
+                productImage.getProduct();
 
         List<ProductImage> images =
-                productImageRepository.findByProductId(product.getId());
+                productImageRepository
+                        .findByProductId(product.getId());
 
         if (images.size() - 1 < 3) {
             throw new BadRequestException(
@@ -129,26 +146,34 @@ public class ProductImageServiceImpl implements ProductImageService {
             );
         }
 
-        Path filePath = Paths.get(
-                productImage.getImageURL().substring(1)
-        );
+        Path filePath =
+                Paths.get(
+                        productImage
+                                .getImageURL()
+                                .substring(1)
+                );
 
         Files.deleteIfExists(filePath);
 
         productImageRepository.delete(productImage);
     }
+
     @Override
-    public ProductImageOutDto getImageById(Long imageId) {
+    public ProductImageOutDto getImageById(
+            Long imageId) {
 
-        ProductImage productImage = productImageRepository.findById(imageId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException(
-                                "Image",
-                                "id",
-                                String.valueOf(imageId)
-                        ));
+        ProductImage productImage =
+                productImageRepository
+                        .findById(imageId)
+                        .orElseThrow(() ->
+                                new EntityNotFoundException(
+                                        "Image",
+                                        "id",
+                                        String.valueOf(imageId)
+                                ));
 
-        return productImageMapper.fromProductImageToOutDto(productImage);
+        return productImageMapper
+                .fromProductImageToOutDto(productImage);
     }
 
     @Override
@@ -170,7 +195,8 @@ public class ProductImageServiceImpl implements ProductImageService {
         }
 
         ProductImage productImage =
-                productImageRepository.findById(imageId)
+                productImageRepository
+                        .findById(imageId)
                         .orElseThrow(() ->
                                 new EntityNotFoundException(
                                         "Image",
@@ -178,35 +204,29 @@ public class ProductImageServiceImpl implements ProductImageService {
                                         String.valueOf(imageId)
                                 ));
 
-        String originalFilename = file.getOriginalFilename();
+        String fileName =
+                UUID.randomUUID() + ".jpg";
 
-        String extension = "";
-
-        if (originalFilename != null &&
-                originalFilename.contains(".")) {
-
-            extension = originalFilename.substring(
-                    originalFilename.lastIndexOf(".")
-            );
-        }
-
-        String fileName = UUID.randomUUID() + extension;
-
-        Path uploadPath = Paths.get("uploads/products");
+        Path uploadPath =
+                Paths.get("uploads/products");
 
         Files.createDirectories(uploadPath);
 
-        Path newFilePath = uploadPath.resolve(fileName);
+        Path newFilePath =
+                uploadPath.resolve(fileName);
 
-        Files.copy(
-                file.getInputStream(),
-                newFilePath,
-                StandardCopyOption.REPLACE_EXISTING
-        );
+        Thumbnails.of(file.getInputStream())
+                .scale(1.0)
+                .outputFormat("jpg")
+                .outputQuality(0.85)
+                .toFile(newFilePath.toFile());
 
-        Path oldFilePath = Paths.get(
-                productImage.getImageURL().substring(1)
-        );
+        Path oldFilePath =
+                Paths.get(
+                        productImage
+                                .getImageURL()
+                                .substring(1)
+                );
 
         Files.deleteIfExists(oldFilePath);
 
@@ -215,10 +235,10 @@ public class ProductImageServiceImpl implements ProductImageService {
         );
 
         ProductImage updatedImage =
-                productImageRepository.save(productImage);
+                productImageRepository
+                        .save(productImage);
 
-        return productImageMapper.fromProductImageToOutDto(
-                updatedImage
-        );
+        return productImageMapper
+                .fromProductImageToOutDto(updatedImage);
     }
 }

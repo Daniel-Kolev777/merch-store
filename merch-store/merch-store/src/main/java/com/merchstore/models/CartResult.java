@@ -1,6 +1,6 @@
 package com.merchstore.models;
 
-import com.merchstore.dtos.CartOutDto;
+import com.merchstore.dtos.cart.CartOutDto;
 
 public class CartResult {
 

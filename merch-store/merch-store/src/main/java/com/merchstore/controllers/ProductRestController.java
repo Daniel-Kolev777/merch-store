@@ -1,5 +1,6 @@
 package com.merchstore.controllers;
 
+import com.merchstore.dtos.product.ProductActiveUpdateDto;
 import com.merchstore.dtos.product.ProductCreateDto;
 import com.merchstore.dtos.product.ProductOutDto;
 import com.merchstore.dtos.product.ProductUpdateDto;
@@ -19,10 +20,13 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductRestController {
 
-    private ProductService productService;
-    private UserService userService;
+    private final ProductService productService;
+    private final UserService userService;
 
-    public ProductRestController(ProductService productService, UserService userService) {
+    public ProductRestController(
+            ProductService productService,
+            UserService userService) {
+
         this.productService = productService;
         this.userService = userService;
     }
@@ -31,20 +35,61 @@ public class ProductRestController {
     public List<ProductOutDto> getAll(
             @ModelAttribute ProductFilterOptions productFilterOptions) {
 
-        return productService.getAll(productFilterOptions);
+        return productService.getAll(
+                productFilterOptions
+        );
+    }
+
+    @GetMapping("/admin")
+    public List<ProductOutDto> getAllAdmin(
+            @ModelAttribute ProductFilterOptions productFilterOptions,
+            Authentication authentication) {
+
+        User currentUser =
+                userService.getUserByUsername(
+                        authentication.getName()
+                );
+
+        return productService.getAllAdmin(
+                productFilterOptions,
+                currentUser
+        );
+    }
+
+    @GetMapping("/admin/{id}")
+    public ProductOutDto getByIdAdmin(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        User currentUser =
+                userService.getUserByUsername(
+                        authentication.getName()
+                );
+
+        return productService.getByIdAdmin(
+                id,
+                currentUser
+        );
     }
 
     @GetMapping("/{id}")
-    private ProductOutDto getById(@PathVariable Long id) {
+    public ProductOutDto getById(
+            @PathVariable Long id) {
+
         return productService.getById(id);
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ProductOutDto create(
             @Valid @ModelAttribute ProductCreateDto productCreateDto,
             @RequestParam("images") List<MultipartFile> images) {
 
-        return productService.create(productCreateDto, images);
+        return productService.create(
+                productCreateDto,
+                images
+        );
     }
 
     @PutMapping("/{productId}")
@@ -53,11 +98,32 @@ public class ProductRestController {
             @Valid @RequestBody ProductUpdateDto productUpdateDto,
             Authentication authentication) {
 
-        User currentUser = userService.getUserByUsername(authentication.getName());
+        User currentUser =
+                userService.getUserByUsername(
+                        authentication.getName()
+                );
 
         return productService.update(
                 productId,
                 productUpdateDto,
+                currentUser
+        );
+    }
+
+    @PatchMapping("/{productId}/active")
+    public ProductOutDto changeActive(
+            @PathVariable Long productId,
+            @Valid @RequestBody ProductActiveUpdateDto requestDto,
+            Authentication authentication) {
+
+        User currentUser =
+                userService.getUserByUsername(
+                        authentication.getName()
+                );
+
+        return productService.changeActive(
+                productId,
+                requestDto.getActive(),
                 currentUser
         );
     }

@@ -1,104 +1,89 @@
-package com.merchstore.models;
+package com.merchstore.dtos.order;
 
 import com.merchstore.models.enums.DeliveryMethod;
 import com.merchstore.models.enums.OrderStatus;
 import com.merchstore.models.enums.PaymentMethod;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "orders")
-public class Order {
+public class OrderOutDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
     private Long id;
 
-    @Column(name = "customer_name", nullable = false)
     private String customerName;
-
-    @Column(name = "customer_email", nullable = false)
     private String customerEmail;
-
-    @Column(name = "customer_phone", nullable = false)
     private String customerPhone;
 
-    @Column(name = "city", nullable = false)
     private String city;
-
-    @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "econt_office_code")
-    private String econtOfficeCode;
-
-    @Column(name = "econt_office_name")
-    private String econtOfficeName;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private OrderStatus status = OrderStatus.PENDING;
+    private OrderStatus status;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "payment_method", nullable = false)
+    private List<OrderItemOutDto> items;
+
     private PaymentMethod paymentMethod;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "delivery_method", nullable = false)
     private DeliveryMethod deliveryMethod;
 
-    @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
+    // EUR
     private BigDecimal subtotal;
-
-    @Column(name = "delivery_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal deliveryPrice;
-
-    @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
-    @Column(name = "guest_token")
-    private String guestToken;
+    // BGN
+    private BigDecimal subtotalBgn;
+    private BigDecimal deliveryPriceBgn;
+    private BigDecimal totalPriceBgn;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String econtOfficeCode;
+    private String econtOfficeName;
 
-    @OneToMany(
-            mappedBy = "order",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<OrderItem> items = new ArrayList<>();
-
-    public Order() {
+    public OrderOutDto() {
     }
 
-    public Order(
+    public OrderOutDto(
+            Long id,
             String customerName,
             String customerEmail,
             String customerPhone,
             String city,
             String address,
-            User user,
-            List<OrderItem> items
+            LocalDateTime createdAt,
+            OrderStatus status,
+            List<OrderItemOutDto> items,
+            PaymentMethod paymentMethod,
+            DeliveryMethod deliveryMethod,
+            BigDecimal subtotal,
+            BigDecimal deliveryPrice,
+            BigDecimal totalPrice,
+            BigDecimal subtotalBgn,
+            BigDecimal deliveryPriceBgn,
+            BigDecimal totalPriceBgn,
+            String econtOfficeCode,
+            String econtOfficeName
     ) {
+        this.id = id;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
         this.customerPhone = customerPhone;
         this.city = city;
         this.address = address;
-        this.user = user;
+        this.createdAt = createdAt;
+        this.status = status;
         this.items = items;
+        this.paymentMethod = paymentMethod;
+        this.deliveryMethod = deliveryMethod;
+        this.subtotal = subtotal;
+        this.deliveryPrice = deliveryPrice;
+        this.totalPrice = totalPrice;
+        this.subtotalBgn = subtotalBgn;
+        this.deliveryPriceBgn = deliveryPriceBgn;
+        this.totalPriceBgn = totalPriceBgn;
+        this.econtOfficeCode = econtOfficeCode;
+        this.econtOfficeName = econtOfficeName;
     }
 
     public Long getId() {
@@ -149,22 +134,6 @@ public class Order {
         this.address = address;
     }
 
-    public String getEcontOfficeCode() {
-        return econtOfficeCode;
-    }
-
-    public void setEcontOfficeCode(String econtOfficeCode) {
-        this.econtOfficeCode = econtOfficeCode;
-    }
-
-    public String getEcontOfficeName() {
-        return econtOfficeName;
-    }
-
-    public void setEcontOfficeName(String econtOfficeName) {
-        this.econtOfficeName = econtOfficeName;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -179,6 +148,14 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public List<OrderItemOutDto> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderItemOutDto> items) {
+        this.items = items;
     }
 
     public PaymentMethod getPaymentMethod() {
@@ -221,27 +198,43 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-    public String getGuestToken() {
-        return guestToken;
+    public BigDecimal getSubtotalBgn() {
+        return subtotalBgn;
     }
 
-    public void setGuestToken(String guestToken) {
-        this.guestToken = guestToken;
+    public void setSubtotalBgn(BigDecimal subtotalBgn) {
+        this.subtotalBgn = subtotalBgn;
     }
 
-    public User getUser() {
-        return user;
+    public BigDecimal getDeliveryPriceBgn() {
+        return deliveryPriceBgn;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setDeliveryPriceBgn(BigDecimal deliveryPriceBgn) {
+        this.deliveryPriceBgn = deliveryPriceBgn;
     }
 
-    public List<OrderItem> getItems() {
-        return items;
+    public BigDecimal getTotalPriceBgn() {
+        return totalPriceBgn;
     }
 
-    public void setItems(List<OrderItem> items) {
-        this.items = items;
+    public void setTotalPriceBgn(BigDecimal totalPriceBgn) {
+        this.totalPriceBgn = totalPriceBgn;
+    }
+
+    public String getEcontOfficeCode() {
+        return econtOfficeCode;
+    }
+
+    public void setEcontOfficeCode(String econtOfficeCode) {
+        this.econtOfficeCode = econtOfficeCode;
+    }
+
+    public String getEcontOfficeName() {
+        return econtOfficeName;
+    }
+
+    public void setEcontOfficeName(String econtOfficeName) {
+        this.econtOfficeName = econtOfficeName;
     }
 }

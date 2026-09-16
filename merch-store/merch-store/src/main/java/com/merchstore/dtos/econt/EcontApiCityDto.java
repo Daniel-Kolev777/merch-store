@@ -1,20 +1,12 @@
-package com.merchstore.dtos.category;
+package com.merchstore.dtos.econt;
 
-public class CategoryOutDto {
+public class EcontApiCityDto {
 
     private Long id;
-
     private String name;
+    private String postCode;
 
-    public CategoryOutDto() {
-    }
-
-    public CategoryOutDto(
-            Long id,
-            String name
-    ) {
-        this.id = id;
-        this.name = name;
+    public EcontApiCityDto() {
     }
 
     public Long getId() {
@@ -31,5 +23,13 @@ public class CategoryOutDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPostCode() {
+        return postCode;
+    }
+
+    public void setPostCode(String postCode) {
+        this.postCode = postCode;
     }
 }

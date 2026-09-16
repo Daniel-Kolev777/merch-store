@@ -1,7 +1,7 @@
 package com.merchstore.helpers;
 
-import com.merchstore.dtos.CartItemOutDto;
-import com.merchstore.dtos.CartOutDto;
+import com.merchstore.dtos.cart.CartItemOutDto;
+import com.merchstore.dtos.cart.CartOutDto;
 import com.merchstore.models.Cart;
 import com.merchstore.models.CartItem;
 import org.springframework.stereotype.Component;

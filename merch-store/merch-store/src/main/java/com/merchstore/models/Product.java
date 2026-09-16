@@ -1,10 +1,15 @@
 package com.merchstore.models;
 
+import com.merchstore.models.enums.Size;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -24,21 +29,85 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Column(
+            name = "weight",
+            nullable = false,
+            precision = 6,
+            scale = 3
+    )
+    private BigDecimal weight;
+
+    @Column(
+            name = "has_sizes",
+            nullable = false
+    )
+    private boolean hasSizes;
+
+    @Column(
+            name = "quantity",
+            nullable = false
+    )
+    private Integer quantity;
+
+    @Column(
+            name = "active",
+            nullable = false
+    )
+    private boolean active = true;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "product_available_sizes",
+            joinColumns = @JoinColumn(name = "product_id")
+    )
+    @Enumerated(EnumType.STRING)
+    @Column(name = "size")
+    private Set<Size> availableSizes = new HashSet<>();
+
+    @CreationTimestamp
+    @Column(
+            name = "created_at",
+            nullable = false,
+            updatable = false
+    )
+    private LocalDateTime createdAt;
+
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(
+            name = "category_id",
+            nullable = false
+    )
     private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<ProductImage> images = new ArrayList<>();
 
-    public Product(Category category, BigDecimal price, String description, String name) {
-        this.category = category;
-        this.price = price;
-        this.description = description;
-        this.name = name;
+    public Product() {
     }
 
-    public Product() {
+    public Product(
+            Category category,
+            BigDecimal price,
+            BigDecimal weight,
+            String description,
+            String name,
+            boolean hasSizes,
+            Integer quantity,
+            Set<Size> availableSizes
+    ) {
+        this.category = category;
+        this.price = price;
+        this.weight = weight;
+        this.description = description;
+        this.name = name;
+        this.hasSizes = hasSizes;
+        this.quantity = quantity;
+        this.availableSizes = availableSizes;
+        this.active = true;
     }
 
     public Long getId() {
@@ -71,6 +140,54 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public BigDecimal getWeight() {
+        return weight;
+    }
+
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
+
+    public boolean isHasSizes() {
+        return hasSizes;
+    }
+
+    public void setHasSizes(boolean hasSizes) {
+        this.hasSizes = hasSizes;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Set<Size> getAvailableSizes() {
+        return availableSizes;
+    }
+
+    public void setAvailableSizes(Set<Size> availableSizes) {
+        this.availableSizes = availableSizes;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Category getCategory() {

@@ -44,8 +44,14 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 
+	implementation 'net.coobird:thumbnailator:0.4.20'
+
+
 	// Thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	//Email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 
 	// Tests

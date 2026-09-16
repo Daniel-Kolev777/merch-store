@@ -1,5 +1,6 @@
 package com.merchstore.models;
 
+import com.merchstore.models.enums.Size;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -14,26 +15,42 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(
+            name = "product_id",
+            nullable = false
+    )
     private Product product;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(
+            name = "quantity",
+            nullable = false
+    )
     private Integer quantity;
 
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = false)
-    private String size;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "size")
+    private Size size;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(
+            name = "order_id",
+            nullable = false
+    )
     private Order order;
 
     public OrderItem() {
     }
 
-    public OrderItem(Product product, Integer quantity, BigDecimal price, String size, Order order) {
+    public OrderItem(
+            Product product,
+            Integer quantity,
+            BigDecimal price,
+            Size size,
+            Order order
+    ) {
         this.product = product;
         this.quantity = quantity;
         this.price = price;
@@ -73,11 +90,11 @@ public class OrderItem {
         this.price = price;
     }
 
-    public String getSize() {
+    public Size getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(Size size) {
         this.size = size;
     }
 

@@ -1,0 +1,280 @@
+.email-body {
+    margin: 0;
+    padding: 0;
+    background-color: #f2f3f5;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.email-container {
+    width: 100%;
+    max-width: 650px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+.email-header {
+    padding: 35px 25px;
+    text-align: center;
+    background-color: #111111;
+}
+
+.email-logo {
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.email-subtitle {
+    margin-top: 10px;
+    color: #aaaaaa;
+    font-size: 14px;
+}
+
+
+/* =========================
+   CONTENT
+   ========================= */
+
+.email-content {
+    padding: 30px;
+}
+
+.order-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.order-title h1 {
+    margin: 0;
+    color: #111111;
+    font-size: 24px;
+}
+
+
+/* =========================
+   STATUS
+   ========================= */
+
+.status-badge {
+    padding: 8px 14px;
+    border-radius: 20px;
+    background-color: #fff3cd;
+    color: #856404;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+/* =========================
+   SECTIONS
+   ========================= */
+
+.order-section {
+    margin-bottom: 22px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+.order-section h2 {
+    margin: 0 0 18px;
+    color: #111111;
+    font-size: 17px;
+}
+
+
+/* =========================
+   INFORMATION
+   ========================= */
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: #777777;
+    font-size: 14px;
+}
+
+.info-value {
+    color: #111111;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================
+   PRODUCTS
+   ========================= */
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #dddddd;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.product-name {
+    margin-bottom: 7px;
+    color: #111111;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.product-details {
+    color: #777777;
+    font-size: 13px;
+}
+
+.product-price {
+    color: #111111;
+    font-size: 15px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+
+/* =========================
+   SUMMARY
+   ========================= */
+
+.order-summary {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #111111;
+    color: #ffffff;
+}
+
+.order-summary div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.order-summary span {
+    color: #aaaaaa;
+    font-size: 12px;
+}
+
+.order-summary strong {
+    font-size: 16px;
+}
+
+
+/* =========================
+   FOOTER
+   ========================= */
+
+.email-footer {
+    padding: 25px;
+    text-align: center;
+    background-color: #111111;
+}
+
+.footer-logo {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.email-footer p {
+    margin: 8px 0 0;
+    color: #888888;
+    font-size: 12px;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 600px) {
+
+    .email-container {
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .email-content {
+        padding: 20px;
+    }
+
+    .order-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .info-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .order-item {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .order-summary {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+/* PRODUCT IMAGES */
+
+.product-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.product-image {
+    width: 85px;
+    height: 85px;
+    min-width: 85px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e5e5e5;
+    background: #ffffff;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.product-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
